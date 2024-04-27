@@ -68,6 +68,9 @@ class TodoTile extends StatelessWidget {
               if (!taskCompleted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
+                    dismissDirection: DismissDirection.horizontal,
+                    elevation: 10,
+                    backgroundColor: Colors.red,
                     content: MyText(
                         text: 'Please complete the task before deleting it.'),
                     duration: Duration(seconds: 2),

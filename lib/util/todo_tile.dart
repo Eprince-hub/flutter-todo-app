@@ -8,12 +8,14 @@ class TodoTile extends StatelessWidget {
     required this.taskCompleted,
     required this.onChanged,
     required this.deleteFunction,
+    required this.updateFunction,
   });
 
   final String taskName;
   final bool taskCompleted;
   final Function(bool?)? onChanged;
   final Function(BuildContext)? deleteFunction;
+  final Function(BuildContext)? updateFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,34 @@ class TodoTile extends StatelessWidget {
 
           // Keep the delete button at the end
           const Expanded(child: SizedBox()),
+
+          // update button
+          IconButton(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.all(0),
+              ),
+            ),
+            onPressed: () {
+              if (taskCompleted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    dismissDirection: DismissDirection.horizontal,
+                    elevation: 10,
+                    backgroundColor: Colors.red,
+                    content: MyText(text: "Can't update a completed task"),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+                return;
+              }
+              updateFunction!(context);
+            },
+            icon: const Icon(
+              Icons.update,
+              color: Colors.deepPurple,
+            ),
+          ),
 
           // delete button
           IconButton(

@@ -53,6 +53,21 @@ class _HomePageState extends State<MyHomePage> {
     }
   }
 
+  // update existing todo
+  void updateTodo(int todoIndex) {
+    if (_textController.text.isNotEmpty) {
+      // todoLists[todoIndex] = _textController.text;
+      setState(() {
+        todoLists[todoIndex] = {
+          'taskName': _textController.text,
+          'taskCompleted': todoLists[todoIndex]['taskCompleted'],
+        };
+      });
+      displayTodoLength();
+      Navigator.of(context).pop();
+    }
+  }
+
   // create a new todo
   void createNewTodo() {
     showDialog(
@@ -61,6 +76,21 @@ class _HomePageState extends State<MyHomePage> {
         return DialogBox(
           controller: _textController,
           onSave: saveNewTodo,
+          onCancel: () => Navigator.of(context).pop(),
+        );
+      },
+    );
+  }
+
+  // Update a todo
+  void updateTodoDialog(int index) {
+    _textController.text = todoLists[index]['taskName'] as String;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogBox(
+          controller: _textController,
+          onSave: () => updateTodo(index),
           onCancel: () => Navigator.of(context).pop(),
         );
       },
@@ -147,6 +177,8 @@ class _HomePageState extends State<MyHomePage> {
                       onChanged: (bool? value) => toggleCheckbox(value, index),
                       deleteFunction: (BuildContext context) =>
                           deleteTodo(index),
+                      updateFunction: (BuildContext context) =>
+                          updateTodoDialog(index),
                     );
                   },
                 ),
